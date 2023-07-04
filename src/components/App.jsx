@@ -1,32 +1,24 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions.jsx';
 import { Statistics } from './Statistics/Statistics.jsx';
 
-export class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
+export default function App() {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
-  onLeaveFeedback = e => {
+  const onLeaveFeedback = e => {
     const btnId = e.currentTarget.id;
 
     switch (btnId) {
       case 'good':
-        this.setState(prevState => {
-          return { good: prevState.good + 1 };
-        });
+       setGood(good + 1);
         break;
       case 'neutral':
-        this.setState(prevState => {
-          return { neutral: prevState.neutral + 1 };
-        });
+        setNeutral(neutral + 1);
         break;
       case 'bad':
-        this.setState(prevState => {
-          return { bad: prevState.bad + 1 };
-        });
+        setBad(bad + 1);
         break;
 
       default:
@@ -34,18 +26,16 @@ export class App extends Component {
     }
   };
 
-  countTotal = () => {
-    const { good, bad, neutral } = this.state;
+  const countTotal = () => {
     return good + bad + neutral;
   }
 
-  countPositivePercentage = (totalCount) => { 
-    return ((this.state.good * 100) / totalCount).toFixed(1);
+  const countPositivePercentage = (totalCount) => { 
+    return ((good * 100) / totalCount).toFixed(1);
   }
 
-  render() {
-    const total = this.countTotal();
-    const percentage = this.countPositivePercentage(total);
+    const total = countTotal();
+    const percentage = countPositivePercentage(total);
 
     return (
       <div
@@ -59,15 +49,14 @@ export class App extends Component {
         }}
       >
         <h1>Please leave feedback</h1>
-        <FeedbackOptions onLeaveFeedback={this.onLeaveFeedback} />
+        <FeedbackOptions onLeaveFeedback={onLeaveFeedback} />
         <Statistics
-          goodValue={this.state.good}
-          neutralValue={this.state.neutral}
-          badValue={this.state.bad}
+          goodValue={good}
+          neutralValue={neutral}
+          badValue={bad}
           total={total}
           percentage={percentage}
         />
       </div>
     );
-  }
 }
